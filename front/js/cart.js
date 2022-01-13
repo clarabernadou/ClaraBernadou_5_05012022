@@ -1,21 +1,19 @@
-var removeCartIdemButtons = document.getElementsByClassName('cart__item__content__settings__delete')
-console.log(removeCartIdemButtons)
-for (var i = 0; i < removeCartIdemButtons.length; i++)
-    var button = removeCartIdemButtons[i]
-    button.addEventListener('click', function(event) {
-            var buttonClicked event
-            buttonClicked.parentElement.remove()
-    })
-}
+let addProduct = JSON.parse(URLSearchParams.getItem("product"));
 
-function updateCartTotal() {
-    var cartIdemContainer = document.getElementsByClassName('cart__item')[0]
-    var cart = cartIdemContainer.getElementsByClassName('cart')
-    for (var i = 0; i < cart.length; i++) {
-        var cart = cart[i]
-        var priceElement = cart.getElementsByClassName('cart__price')[0]
-        var quantityElement = cart.getElementsByClassName('cart__item__content__settings__quantity')[0]
-        console.log(priceElement, quantityElement)
-    }
+console.log(addProduct);
 
-}
+const cartDisplay = async () => {
+    console.log();
+    if(addProduct){
+        await addProduct;
+        console.log(addProduct)
+
+        cart__order.classList.add("display-none");
+
+        continueCommand.addEventListener("click", () => {
+            cart__order.classList.remove("display-none")
+        });
+
+        bloc
+    };
+};
