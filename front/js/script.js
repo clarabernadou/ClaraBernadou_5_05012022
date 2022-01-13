@@ -15,7 +15,7 @@ const meubleDisplay = async () => {
 // VIEWING PRODUCT CARDS
     document.getElementById("items").innerHTML = meubleData.map(
         (meuble) => `
-            <a id="items${meuble._id}" >
+            <a id="items/${meuble._id}" >
                 <article>
                     <h3 class="productName">${meuble.name.toUpperCase()}</h3>
                     <img src="${meuble.imageUrl}" alt="image du canapé ${
