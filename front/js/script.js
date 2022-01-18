@@ -19,7 +19,7 @@ const meubleDisplay = async () => {
                 <article>
                     <h3 class="productName">${meuble.name.toUpperCase()}</h3>
                     <img src="${meuble.imageUrl}" alt="image du canapé ${
-                        meuble.name
+                        meuble.altTxt
                     }"></img>
                     <p class="productDescription">${meuble.description}</p>
                 </article
