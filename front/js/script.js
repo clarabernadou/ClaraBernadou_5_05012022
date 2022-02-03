@@ -1,5 +1,5 @@
 //API CONNECTION FOR PRODUCTS RECOVERY
-let meubleData = []; //create a board
+let meubleData = []; //create array
 const fetchMeuble = async () => {
   await fetch("http://localhost:3000/api/products") //add api url
     .then((res) => res.json())
@@ -12,7 +12,7 @@ const fetchMeuble = async () => {
 const meubleDisplay = async () => {
     await fetchMeuble();
 
-// VIEWING PRODUCT CARDS
+// DISPLAY PRODUCT CARDS
     document.getElementById("items").innerHTML = meubleData.map(
         (meuble) => `
             <a id="items/${meuble._id}" >
