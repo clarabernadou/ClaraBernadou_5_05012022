@@ -2,12 +2,12 @@
 const queryString_url_id = window.location.search;
 
 //EXTRACT ID
-const id = queryString_url_id.split('/')[1];
+const productId = queryString_url_id.split('/')[1];
 
 //PRODUCTS RECOVERY (API REQUEST)
 const getProduct = async () => {
     let rep = {};
-    await fetch(`http://localhost:3000/api/products/${id}`).then(function (a) {
+    await fetch(`http://localhost:3000/api/products/${productId}`).then(function (a) {
         return a.json();
     })
     .then(function (json) {
@@ -17,6 +17,7 @@ const getProduct = async () => {
 };
 
 //PRODUCTS DISPLAY
+async function renderProduct(){
 getProduct().then((value) => {
     console.log(value);
     document.getElementById("title").innerHTML = value.name;
@@ -32,6 +33,7 @@ getProduct().then((value) => {
         });
     addToCart();
 });
+}
 renderProduct();
 
 // ----------------------------------------------------------------------------------

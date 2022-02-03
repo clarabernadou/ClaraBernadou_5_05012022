@@ -12,7 +12,7 @@ const fetchMeuble = async () => {
 const meubleDisplay = async () => {
     await fetchMeuble();
 
-// DISPLAY PRODUCT CARDS
+//DISPLAY PRODUCT CARDS
     document.getElementById("items").innerHTML = meubleData.map(
         (meuble) => `
             <a id="items/${meuble._id}" >
@@ -27,7 +27,7 @@ const meubleDisplay = async () => {
         `,
     ).join("");
 
-// REDIRECTION TO THE PRODUCT PAGE
+//REDIRECTION TO THE PRODUCT PAGE
     let button = document.querySelectorAll("a")
 
     button.forEach(function(button) {
