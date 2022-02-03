@@ -1,135 +1,101 @@
-console.log("coucou");
-
 //LOCAL STORAGE
-let productSaveInLS = JSON.parse(localStorage.getItem("product"));
-console.log(productSaveInLS);
+let items = JSON.parse(localStorage.getItem("product"));
 
-//CART
-const cartDisplay = document.querySelector("#cartAndFormContainer");
-console.log(cartDisplay);
-
-//CART IS EMPTY
-if(productSaveInLS === null || productSaveInLS == 0){
-const cartEmpty = `
-    <div class="cartAndFormContainer">
-        <div>Le panier est vide</div>
-    </div>
-`;
-cartDisplay.innerHTML = cartEmpty;
-}else{
-    let structureCart = [];
-
-//DISPLAY PRODUCT(S) IN CART
-for(k = 0; k < productSaveInLS.length; k++){
-    structureCart = structureCart + `
-<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
-    <div class="cart__item__img">
-    <img src="${productSaveInLS[k].imageUrl}" alt="${productSaveInLS[k].altTxt}">
-    </div>
-    <div class="cart__item__content">
-    <div class="cart__item__content__description">
-        <h2>${productSaveInLS[k].nameProduct}</h2>
-        <p>${productSaveInLS[k].optionsProduct}</p>
-        <p>${productSaveInLS[k].priceProduct} €</p>
-    </div>
-    <div class="cart__item__content__settings">
-        <div class="cart__item__content__settings__quantity">
-        <p>Quantité : ${productSaveInLS[k].quantityProduct}</p>
-        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
-        </div>
-        <div class="cart__item__content__settings__delete">
-        <p class="deleteItem">Supprimer</p>
-        </div>
-    </div>
-    </div>
-</article>
-    `;
-}
-if(k == productSaveInLS.length){
-    cartDisplay.innerHTML = structureCart;
-}
-}
-
-//DELETE PRODUCT IN CART
-let deleteProduct = document.querySelectorAll("deleteProduct");
-console.log(deleteProduct);
-
-for(let l = 0; l < deleteProduct.length; l++){
-    deleteProduct[1].addEventListener(("click") , (event) =>{
-        event.preventDefault();
+//CART DISPLAY
+function getCart(){
+    if(items === null || items == 0){
+        this.cart = [];
+    }else{
+        this.cart = JSON.parse(cart);
     
-        let id_selectDelete = productSaveInLS[l].id_ProductSelect
-        console.log("id_selectDelete");
-        console.log(id_selectDelete);
+    }
+}
+        saveCart(){
+            localStorage.setItem("cart", JSON.stringify(this.cart));
+        }
 
-        productSaveInLS = productSaveInLS.filter( element => element.id_ProductSelect !== id_selectDelete);
-        console.log(productSaveInLS);
+//TRY TO FIND THE PRODUCT IN THE CART
+addCart(product){
+let foundProduct = this.cart.find(p => p.id == product.id);
 
-        localStorage.setItem("product", JSON.stringify(productSaveInLS));
+    //IF THE PRODUCT IS NOT FOUND, ADD THE PRODUCT TO THE CART   
+        if(foundProduct != undefined){
+            foundProduct.quantity++;
+        }
 
-        alert("Ce produit a été supprimé du panier");
-        window.location.href = "cart.html"
-    });
+    //OR ELSE, ADD 1 TO QUANTITY
+        else{
+            product.quantity =1;
+            cart.push(product)
+        }
+        saveCart();
 }
 
-//CALCULATE THE PRICE OF THE PRODUCTS IN THE CART
-let totalPriceInCart = [];
-for (let m = 0; m < productSaveInLS.length; m++){
-    let priceProductsInCart = productSaveInLS[m].price;
+//DELETE THE PRODUCT FROM THE CART
+removeFromCart = ("click",(event) =>{
+    localStorage.clear();
+    document.location.reload();
+});
 
-    totalPriceInCart.push(priceProductsInCart)
-    console.log(totalPriceInCart);
+//CHANGE THE QUANTITY IN THE CART
+changeQuantity(product, quantity){
+let foundProduct = this.cart.find(p => p.id == product.id);
+    if(foundProduct != undefined){
+        foundProduct.quantity += quantity;
+        if(foundProduct.quantity <= 0){
+            removeFromCart(foundProduct);
+        }else{
+            saveCart();
+        }
+    }   
 }
 
-//ADD THE PRICES
-const reducer = (accumulator, currentValue) => accumulator + currentValue;
-const totalPrice = priceProductsInCart.reduce(reducer,0);
-console.log(totalPrice);
+//CALCULATE THE TOTAL OF PRODUCTS IN THE CART
+getNumberProduct(){
+let number = 0;
+    for(let product of this.cart){
+        number += product.quantity;
+    }
+        return number;
+}
+    
+//CALCULATE THE TOTAL OF PRICE IN THE CART
+getTotalPrice(){
+let total = 0;
+    for(let product of this.cart){
+        number += product.quantity * product.price;
+    }
+        return total;
+}
+}
 
-//PRICE DISPLAY ON HTML
-const priceDisplay = `
-<span id="totalPrice">${totalPrice}</span>
-`
+//FORM IN CART
+document.querySelector(`.cart__order__form input[type="submit"]`).addEventListener("click", (e) => {
+    e.preventDefault();
+    let fields = document.querySelectorAll('.cart__order__form input, .cart__order__form select, .cart__order__form textarea');
+    let valid = true;
+        for (let field of fields){
+            valid &= check(field);
+        if(!valid){
+            break;
+        }
+}
 
-//FORM
-const displayForm = () =>{
-const positionElement = document.querySelector("#cartAndFormContainer");
+//FORM VALIDATION
+if (valid) {
+    console.log("Le formulaire est bien remplis");
+}
+});
 
-const structureForm = `
-<div class="cart__order">
-<form method="get" class="cart__order__form">
-  <div class="cart__order__form__question">
-    <label for="firstName">Prénom: </label>
-    <input type="text" name="firstName" id="firstName" required>
-    <p id="firstNameErrorMsg"><!-- ci est un message d'erreur --></p>
-  </div>
-  <div class="cart__order__form__question">
-    <label for="lastName">Nom: </label>
-    <input type="text" name="lastName" id="lastName" required>
-    <p id="lastNameErrorMsg"></p>
-  </div>
-  <div class="cart__order__form__question">
-    <label for="address">Adresse: </label>
-    <input type="text" name="address" id="address" required>
-    <p id="addressErrorMsg"></p>
-  </div>
-  <div class="cart__order__form__question">
-    <label for="city">Ville: </label>
-    <input type="text" name="city" id="city" required>
-    <p id="cityErrorMsg"></p>
-  </div>
-  <div class="cart__order__form__question">
-    <label for="email">Email: </label>
-    <input type="email" name="email" id="email" required>
-    <p id="emailErrorMsg"></p>
-  </div>
-  <div class="cart__order__form__submit">
-    <input type="submit" value="Commander !" id="order">
-  </div>
-</form>
-</div>
-`;
-    positionElement.insertAdjacentHTML("afterend", structureForm);
-};
+//FORM ERRORS
+function check(input){
+    input.setCustomValidity("");
+    if(input.validity.valueMissing){
+        input.setCustomValidity("Veuillez remplir ce champ avec une information valide.");
+    }
+        return input.reportValidity();
+}
 
-displayForm();
+//CONFIRMATION PAGE
+const responseId = localStorage.getItem("responseId");
+console.log(`responseId : ${responseId}`)
