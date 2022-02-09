@@ -20,7 +20,7 @@ function getCart(){
 async function displayCart(){
     const totalPrice = 0;
     const totalQuantity = 0;
-    const cartContent = "",
+    const cartContent = "";
     for (const product of items) {
         await fetch(`http://localhost:3000/api/products/${product.id}`)
         .then(result => result.json())
@@ -65,12 +65,12 @@ changeQuantity();
 //REMOVE FROM CART
 function removeFromCart(){
     const btn_remove = document.querySelectorAll(".deleteItem");
-    for(const article = 0; article < items.length; article ++) {
-        btn_remove[article].addEventListener("click", (event) => {
-            event.preventDefault();
+    for(const i = 0; i < items.length; i++) {
+        btn_remove[i].addEventListener("click", (event) => {
+        event.preventDefault();
         
-        const valueId = removeFromCart[article].closest("article").dataset.id;
-        const valueColor = removeFromCart[article].closest("article").dataset.color;
+        const valueId = removeFromCart[i].closest("article").dataset.id;
+        const valueColor = removeFromCart[i].closest("article").dataset.color;
         if((valueId && valueColor)){
             if(items.length > 1){
                 items.splice(article,1);
@@ -93,11 +93,11 @@ function changeQuantity(){
     const min = 1;
     const max = 100;
     const btn_quantity = document.querySelectorAll(".itemQuantity");
-    for(const article = 0; article < items.length; article++){
-        btn_quantity[article].addEventListener("change", (event) => {
+    for(const j = 0; j < items.length; j++){
+        btn_quantity[j].addEventListener("change", (event) => {
             event.preventDefault();
-        const valueId = btn_quantity[article].closest("article").dataset.id;
-        const valueColor = btn_quantity[article].closest("article").dataset.color;
+        const valueId = btn_quantity[j].closest("article").dataset.id;
+        const valueColor = btn_quantity[j].closest("article").dataset.color;
         if((valueId && valueColor)){
             const valueNewQuantity = event.target.value;
             if(valueNewQuantity < min){
@@ -105,8 +105,8 @@ function changeQuantity(){
             }else if(valueNewQuantity > max){
                 alert("Merci de ne pas dépasser" + max + "articles");
             }else{
-                if((items[article].id === valueId) && (items[article].color === valueColor)){
-                    items[article].quantity = parseInt(valueNewQuantity);
+                if((items[j].id === valueId) && (items[j].color === valueColor)){
+                    items[j].quantity = parseInt(valueNewQuantity);
                     localStorage.setItem("product", JSON.stringify(items));
                     location.reload();
                     window.location.hash = "cart__items";
@@ -220,8 +220,8 @@ function orderSend(){
                     window.location.href = `./confirmation.html?id=${result.orderId}`;
                     localStorage.clear();
                 })
-                .catch(console.error() => {
-                    console.log("error");
+                btn_order.catch((error) => {
+                    console.error(error);
                 });
         }else{
             alert("Veuillez vérifier vos informations.");

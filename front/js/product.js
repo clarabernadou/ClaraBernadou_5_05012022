@@ -64,7 +64,6 @@ function addToCart(){
             //ADD TO CART CONFIRMATION (POPUP)
             const confirmation = () => {
                 if(window.confirm(`L'article a été envoyé dans le panier`)){
-                    window.location.href = "cart.html";
                 }
             }
 
@@ -72,14 +71,14 @@ function addToCart(){
             if (JSON.parse(localStorage.getItem("product")) !== null){
                 const items = JSON.parse(localStorage.getItem("product"));
                 //RECOVERY OF VALUES
-                for (const article = 0; article < items.length; article++){
-                    const valueId = items[article].id;
-                    const valueColor = items[article].color;
-                    const valueQuantity = items[article].quantity;
+                for (const i = 0; i < items.length; i++){
+                    const valueId = items[i].id;
+                    const valueColor = items[i].color;
+                    const valueQuantity = items[i].quantity;
                 //ADD PRODUCT IN CART
                 if(valueId && valueColor && valueQuantity){
                     if((valueId === infoProduct.id) && (valueColor === infoProduct.color)){
-                        items[article].quantity = parseInt(valueQuantity) + parseInt(infoProduct.quantity);
+                        items[i].quantity = parseInt(valueQuantity) + parseInt(infoProduct.quantity);
                         localStorage.setItem("product", JSON.stringify(items));
                         //CONFIRMATION
                         confirmation();
@@ -87,7 +86,7 @@ function addToCart(){
                 
                 //ADD NEW PRODUCT IN CART
                 }else{
-                    if(article === items.length - 1){
+                    if(i === items.length - 1){
                         items.push(infoProduct);
                         localStorage.setItem("product", JSON.stringify(items));
                         confirmation();
