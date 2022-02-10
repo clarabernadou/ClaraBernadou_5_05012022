@@ -21,7 +21,7 @@ async function displayCart(){
     const totalPrice = 0;
     const totalQuantity = 0;
     const cartContent = "";
-    for (const product of items) {
+    for (let product of items) {
         await fetch(`http://localhost:3000/api/products/${product.id}`)
         .then(result => result.json())
         .then(article => {
@@ -58,19 +58,19 @@ async function displayCart(){
     document.getElementById("totalQuantity").innerHTML = totalQuantity;
     document.getElementById("totalPrice").innerHTML = totalPrice;
 
-removeFromCart();
-changeQuantity();
+    removeFromCart();
+    changeQuantity();
 };
 
 //REMOVE FROM CART
 function removeFromCart(){
     const btn_remove = document.querySelectorAll(".deleteItem");
-    for(const i = 0; i < items.length; i++) {
-        btn_remove[i].addEventListener("click", (event) => {
-        event.preventDefault();
+    for(let article = 0; article < items.length; article++) {
+        btn_remove[article].addEventListener('click', (event) => {
+            event.preventDefault();  
         
-        const valueId = removeFromCart[i].closest("article").dataset.id;
-        const valueColor = removeFromCart[i].closest("article").dataset.color;
+        let valueId = removeFromCart[article].closest("article").dataset.id;
+        let valueColor = removeFromCart[article].closest("article").dataset.color;
         if((valueId && valueColor)){
             if(items.length > 1){
                 items.splice(article,1);
@@ -93,11 +93,11 @@ function changeQuantity(){
     const min = 1;
     const max = 100;
     const btn_quantity = document.querySelectorAll(".itemQuantity");
-    for(const j = 0; j < items.length; j++){
-        btn_quantity[j].addEventListener("change", (event) => {
+    for(let article = 0; article < items.length; article++){
+        btn_quantity[article].addEventListener("change", (event) => {
             event.preventDefault();
-        const valueId = btn_quantity[j].closest("article").dataset.id;
-        const valueColor = btn_quantity[j].closest("article").dataset.color;
+        const valueId = btn_quantity[article].closest("article").dataset.id;
+        const valueColor = btn_quantity[article].closest("article").dataset.color;
         if((valueId && valueColor)){
             const valueNewQuantity = event.target.value;
             if(valueNewQuantity < min){
