@@ -36,6 +36,8 @@ getProduct().then((value) => {
 }
 renderProduct();
 
+//PRODUCT QUANTITY
+
 // ----------------------------------------------------------------------------------
 //CART BUTTON
 function addToCart(){
@@ -49,8 +51,9 @@ function addToCart(){
             if(productColor == ""){
                 alert("Veuillez sélectionnez une couleur");
                 return;
-            } else if(productQuantity == 0){
-                alert("Veuillez sélectionnez une quantité");
+            }else if(productQuantity >= 1 && productQuantity <= 100){
+            }else{
+                alert("Veuillez sélectionnez une quantité entre 0 et 100");
                 return;
             }
 
