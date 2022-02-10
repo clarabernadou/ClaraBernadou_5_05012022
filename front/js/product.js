@@ -40,7 +40,7 @@ renderProduct();
 //CART BUTTON
 function addToCart(){
     const btn_sendInCart = document.getElementById("addToCart");
-    btn_sendInCart.addEventListener("click", (event) => {
+    btn_sendInCart.addEventListener('click', (event) => {
         event.preventDefault();
 
         //ADD PRODUCT IN HTML
@@ -71,22 +71,23 @@ function addToCart(){
             if (JSON.parse(localStorage.getItem("product")) !== null){
                 const items = JSON.parse(localStorage.getItem("product"));
                 //RECOVERY OF VALUES
-                for (const i = 0; i < items.length; i++){
-                    const valueId = items[i].id;
-                    const valueColor = items[i].color;
-                    const valueQuantity = items[i].quantity;
-                //ADD PRODUCT IN CART
+                for (let article = 0; article < items.length; article++){
+                    const valueId = items[article].id;
+                    const valueColor = items[article].color;
+                    const valueQuantity = items[article].quantity;
+                //IF JSON CHECK
                 if(valueId && valueColor && valueQuantity){
+                    //SAME PRODUCT
                     if((valueId === infoProduct.id) && (valueColor === infoProduct.color)){
-                        items[i].quantity = parseInt(valueQuantity) + parseInt(infoProduct.quantity);
+                        items[article].quantity = parseInt(valueQuantity) + parseInt(infoProduct.quantity);
                         localStorage.setItem("product", JSON.stringify(items));
                         //CONFIRMATION
                         confirmation();
                 break;
                 
-                //ADD NEW PRODUCT IN CART
+                //IF NEW PRODUCT
                 }else{
-                    if(i === items.length - 1){
+                    if (article === items.length - 1){
                         items.push(infoProduct);
                         localStorage.setItem("product", JSON.stringify(items));
                         confirmation();
@@ -94,7 +95,7 @@ function addToCart(){
                 }
                     }
                 }else{
-                    console.log("Error");
+                    console.log("Bad localstorage");
                 }
                 }
 
