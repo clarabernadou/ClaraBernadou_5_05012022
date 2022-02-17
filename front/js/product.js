@@ -42,7 +42,7 @@ renderProduct();
 //CART BUTTON
 function addToCart(){
     const btn_sendInCart = document.getElementById("addToCart");
-    btn_sendInCart.addEventListener('click', (event) => {
+    btn_sendInCart.addEventListener("click", (event) => {
         event.preventDefault();
 
         //ADD PRODUCT IN HTML
@@ -66,24 +66,27 @@ function addToCart(){
 
             //ADD TO CART CONFIRMATION (POPUP)
             const confirmation = () => {
-                if(window.confirm(`L'article a été envoyé dans le panier`)){
-                }
+                location.reload();
             }
 
             //IF LOCALSTORAGE EXISTS
             if (JSON.parse(localStorage.getItem("product")) !== null){
                 const items = JSON.parse(localStorage.getItem("product"));
+
                 //RECOVERY OF VALUES
                 for (let article = 0; article < items.length; article++){
                     const valueId = items[article].id;
                     const valueColor = items[article].color;
                     const valueQuantity = items[article].quantity;
+
                 //IF JSON CHECK
                 if(valueId && valueColor && valueQuantity){
+
                     //SAME PRODUCT
                     if((valueId === infoProduct.id) && (valueColor === infoProduct.color)){
                         items[article].quantity = parseInt(valueQuantity) + parseInt(infoProduct.quantity);
                         localStorage.setItem("product", JSON.stringify(items));
+
                         //CONFIRMATION
                         confirmation();
                 break;
