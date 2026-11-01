@@ -1,0 +1,135 @@
+openapi: 3.0.3
+info:
+  title: Kanap — API back-end
+  version: 1.0.0
+  description: |
+    API REST de la boutique de canapés Kanap : catalogue de produits et passage de commande.
+
+    Cette documentation est rédigée à partir du code du dépôt (routes et contrôleurs). Elle décrit l'API ; aucun serveur n'est hébergé ici. Les produits sont définis en mémoire dans le modèle du serveur (il n'y a pas de base de données).
+servers:
+  - url: http://localhost:3000
+    description: Serveur local
+tags:
+  - name: Produits
+  - name: Commande
+paths:
+  /api/products:
+    get:
+      tags: [Produits]
+      summary: Lister les produits
+      responses:
+        '200':
+          description: Tous les produits (l'adresse de l'image est complétée avec l'hôte du serveur)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: Erreur de base de données
+  /api/products/{id}:
+    get:
+      tags: [Produits]
+      summary: Lire un produit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Identifiant du produit (champ _id)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Produit trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Produit introuvable
+        '500':
+          description: Erreur de base de données
+  /api/products/order:
+    post:
+      tags: [Commande]
+      summary: Passer une commande
+      description: "Vérifie que chaque identifiant de produit existe, puis renvoie le récapitulatif avec un numéro de commande généré (UUID). La commande n'est pas enregistrée."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        '201':
+          description: Commande acceptée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Coordonnées ou liste de produits manquantes
+        '500':
+          description: Produit introuvable ou erreur de base de données
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        price:
+          type: integer
+          description: Prix en euros
+        description:
+          type: string
+        altTxt:
+          type: string
+          description: Texte alternatif de l'image
+        imageUrl:
+          type: string
+        colors:
+          type: array
+          items:
+            type: string
+    Contact:
+      type: object
+      required: [firstName, lastName, address, city, email]
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        email:
+          type: string
+          format: email
+    OrderRequest:
+      type: object
+      required: [contact, products]
+      properties:
+        contact:
+          $ref: '#/components/schemas/Contact'
+        products:
+          type: array
+          description: Identifiants (_id) des produits commandés
+          items:
+            type: string
+    OrderResponse:
+      type: object
+      properties:
+        contact:
+          $ref: '#/components/schemas/Contact'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        orderId:
+          type: string
+          format: uuid
